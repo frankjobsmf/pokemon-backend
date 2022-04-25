@@ -9,7 +9,7 @@ class Server {
         this.port = process.env.PORT;
 
         //paths
-        this.authPath = '/api/login';
+        this.authPath = '/api/auth';
         this.userPath = '/api/user';
         this.pokemonPath = '/api/pokemon';
 
@@ -31,6 +31,7 @@ class Server {
     }
 
     routes(){
+        this.app.use( this.authPath, require('../routes/auth.route') );
         this.app.use( this.userPath, require('../routes/user.route') );
         this.app.use( this.pokemonPath, require('../routes/pokemon.route') );
     }
