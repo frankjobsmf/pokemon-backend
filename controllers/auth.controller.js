@@ -4,6 +4,9 @@ const bcryptjs = require('bcryptjs');
 //user
 const User = require('../models/user.model');
 
+//generate token
+const { generateJWT } = require('../helpers/generate-jwt');
+  
 const login = async( req = request, res = response) => {
     const { nickname, password } = req.body;
 
@@ -26,12 +29,17 @@ const login = async( req = request, res = response) => {
     }
 
     //falta generar el jwt
+    const token = await generateJWT( user.id ); 
+
+    console.log(token);
+
 
     res.json({
-        msg: 'login'
-    });
+        msg: 'login',
+        nickname: user.nickname,
+        token,
+    });    
     
-
 };
 
 module.exports = {
