@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 
+const { dbConnection } = require('../database/config');
+
 class Server {
     constructor(){
         this.app = express();
@@ -8,13 +10,19 @@ class Server {
 
         //paths
         this.authPath = '/api/login';
-        this.userPath = '/api/user;'
+        this.userPath = '/api/user';
         this.pokemonPath = '/api/pokemon';
 
+        //db
+        this.connection();
 
         //methods
         this.middlewares();
         this.routes();
+    }
+
+    async connection(){
+        await dbConnection();
     }
 
     middlewares(){
