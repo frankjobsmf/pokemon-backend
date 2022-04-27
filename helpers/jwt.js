@@ -17,9 +17,22 @@ const generateJWT = ( id ) => {
             };
         });
     });
+};
 
+const decodeToken = ( token ) => {
+    return new Promise((resolve, reject) => {
+        jwt.verify(token, process.env.PRIVATEKEY, (err, data) => {
+             if (err) {
+                 reject('Error decode token');
+             } else {
+                 resolve(data);
+             };
+        });
+
+    });
 };
 
 module.exports = {
-    generateJWT
+    generateJWT,
+    decodeToken,
 }

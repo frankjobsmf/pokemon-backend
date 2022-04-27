@@ -1,12 +1,12 @@
 const { Schema, model } = require('mongoose');
 
-const Favorite = new Schema({
+const FavoriteSchema = new Schema({
     idPokemon: {
         type: Number,
         required: [true, 'The id of the Pokemon is required']
     },
     idUser: {
-        type: Number,
+        type: Object,
         required: [true, 'The id user is required']
     },
     date: {
@@ -16,3 +16,4 @@ const Favorite = new Schema({
     
 });
 
+module.exports = model( 'Favorite', FavoriteSchema );
