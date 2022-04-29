@@ -1,11 +1,12 @@
 const { request, response } = require('express');
 const bcryptjs = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 //user
 const User = require('../models/user.model');
 
 //generate token
-const { generateJWT } = require('../helpers/jwt');
+const { generateJWT, decodeToken } = require('../helpers/jwt');
   
 const login = async( req = request, res = response) => {
     const { nickname, password } = req.body;
@@ -29,16 +30,37 @@ const login = async( req = request, res = response) => {
     }
 
     //falta generar el jwt
-    const token = await generateJWT( user.id ); 
+    const tokens = await generateJWT( user.id ); 
  
     res.json({
         msg: 'login',
         nickname: user.nickname,
-        token,
-    });    
-    
+        accessToken: tokens[0],
+        refreshToken: tokens[1],
+    });
+};
+
+const refreshToken = async( req = request, res = response ) => {
+
+    const refresh = req.header('Authorization');
+
+    if ( !refresh ){
+        return res.status( 401 ).json({
+            msg: 'Refresh Token error validate'
+        });
+    };
+
+    const { id } = await decodeToken( refresh );
+    const [ accessToken, refreshToken ] = await generateJWT( id );
+
+
+    res.status(200).json({
+        accessToken,
+        refreshToken
+    });
 };
 
 module.exports = {
     login,
+    refreshToken,
 }
